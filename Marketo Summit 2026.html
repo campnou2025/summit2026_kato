@@ -1,0 +1,862 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<title>Adobe Summit 2026 — Marketo Engage サマリー</title>
+<script src="deck-stage.js"></script>
+<style>
+  :root{
+    --ink:#000;
+    --ink-2:#2C2C2C;
+    --paper:#FFFFFF;
+    --paper-2:#F5F5F5;
+    --red:#EB1000;
+    --green:#0AA35B;
+    --blue:#3A63F9;
+    --pink:#FF66CC;
+    --orange:#FFA311;
+    --yellow:#F3C600;
+    --muted:#919191;
+    --line:#E4E4E4;
+    --rainbow: linear-gradient(90deg,#0AA35B 0%,#F3C600 18%,#FFA311 34%,#EB1000 50%,#FF66CC 66%,#3A63F9 82%,#0AA35B 100%);
+    --sans: "Adobe Clean","Helvetica Neue",Arial,"Hiragino Kaku Gothic ProN","Yu Gothic UI","Meiryo",sans-serif;
+  }
+  html,body{margin:0;background:#111;color:var(--ink);font-family:var(--sans);}
+  deck-stage{background:#111;}
+  section{
+    width:1920px;height:1080px;
+    background:var(--paper);
+    color:var(--ink);
+    position:relative;
+    overflow:hidden;
+    font-family:var(--sans);
+    box-sizing:border-box;
+  }
+  /* Footer strip on every slide */
+  .chrome-footer{
+    position:absolute;inset:auto 0 0 0;height:56px;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 64px;font-size:20px;color:#555;letter-spacing:.02em;
+    border-top:1px solid var(--line);background:var(--paper);
+  }
+  .chrome-footer .brand{display:flex;align-items:center;gap:16px;font-weight:700;color:#000;}
+  .chrome-footer .brand b{color:var(--red);}
+  .chrome-footer .rainbow{width:120px;height:6px;border-radius:3px;background:var(--rainbow);}
+
+  /* Corner geometric pattern -- composed of CSS shapes */
+  .pattern{
+    position:absolute;right:0;bottom:56px;width:520px;height:420px;pointer-events:none;
+    --col:#EAEAEA;
+  }
+  .pattern.dark{--col:#2A2A2A;}
+  .pattern .sq{position:absolute;background:var(--col);}
+  .pattern .cir{position:absolute;background:var(--col);border-radius:50%;}
+  .pattern .tri{position:absolute;width:0;height:0;}
+  .pattern .rbow{position:absolute;width:8px;height:220px;right:82px;bottom:80px;background:var(--rainbow);}
+
+  /* ========== Slide kinds ========== */
+
+  /* Title slide — big Adobe Summit-style wordmark */
+  .s-title{display:grid;grid-template-rows:auto 1fr auto;padding:96px 96px 96px;}
+  .s-title .eyebrow{font-size:28px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:#000;}
+  .s-title .eyebrow b{color:var(--red);}
+  .s-title h1{
+    font-size:220px;line-height:.92;letter-spacing:-0.035em;
+    font-weight:900;margin:40px 0 0;color:#000;
+    text-wrap:balance;
+  }
+  .s-title h1 .red{color:var(--red);}
+  .s-title .sub{
+    font-size:42px;font-weight:600;color:#222;margin-top:40px;max-width:1400px;line-height:1.2;
+  }
+  .s-title .meta{
+    display:flex;gap:56px;font-size:22px;color:#444;margin-top:auto;padding-top:40px;
+    border-top:1px solid var(--line);
+  }
+  .s-title .meta div b{display:block;color:#000;font-size:14px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:6px;font-weight:700;}
+
+  /* Section divider — red flood */
+  .s-divider{background:var(--red);color:#fff;display:grid;grid-template-rows:1fr auto;padding:96px;}
+  .s-divider .num{font-size:260px;font-weight:900;line-height:.85;letter-spacing:-.04em;opacity:.95;}
+  .s-divider h2{font-size:120px;font-weight:900;line-height:.95;letter-spacing:-.03em;margin:0;max-width:1500px;}
+  .s-divider .tag{font-size:28px;letter-spacing:.22em;text-transform:uppercase;opacity:.85;margin-bottom:24px;}
+  .s-divider .rainbow{height:10px;background:var(--rainbow);width:320px;margin-top:24px;}
+  .s-divider .chrome-footer{background:var(--red);color:rgba(255,255,255,.8);border-top-color:rgba(255,255,255,.2);}
+  .s-divider .chrome-footer .brand{color:#fff;}
+  .s-divider .chrome-footer .brand b{color:#fff;}
+
+  /* Standard content slide */
+  .s-std{padding:88px 96px 96px;}
+  .s-std .eyebrow{font-size:20px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--red);margin-bottom:20px;}
+  .s-std h2{font-size:84px;font-weight:900;letter-spacing:-.025em;line-height:1;margin:0 0 40px;color:#000;text-wrap:balance;}
+  .s-std h3{font-size:36px;font-weight:700;letter-spacing:-.01em;color:#000;margin:0 0 12px;}
+
+  /* Agenda / overview cards */
+  .grid-9{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:24px;}
+  .s-card{
+    border:1.5px solid var(--line);border-radius:20px;padding:32px 32px 28px;background:#fff;
+    display:flex;flex-direction:column;gap:14px;position:relative;overflow:hidden;
+    min-height:260px;
+  }
+  .s-card .code{
+    display:inline-flex;align-items:center;gap:8px;font-size:18px;font-weight:800;letter-spacing:.08em;
+    color:var(--red);background:#FFF1EF;padding:6px 12px;border-radius:999px;align-self:flex-start;
+  }
+  .s-card h4{font-size:26px;line-height:1.2;font-weight:800;margin:0;color:#000;letter-spacing:-.01em;text-wrap:balance;}
+  .s-card .spk{font-size:18px;color:#555;margin-top:auto;line-height:1.4;}
+  .s-card .spk b{color:#000;font-weight:700;}
+  .s-card .tag{font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:#888;font-weight:700;}
+  .s-card .bar{position:absolute;left:0;top:0;bottom:0;width:8px;background:var(--red);}
+  .s-card.alt1 .bar{background:var(--blue);}.s-card.alt1 .code{color:var(--blue);background:#EAEFFF;}
+  .s-card.alt2 .bar{background:var(--green);}.s-card.alt2 .code{color:var(--green);background:#E6F6EE;}
+  .s-card.alt3 .bar{background:var(--orange);}.s-card.alt3 .code{color:#B25F00;background:#FFF3E0;}
+  .s-card.alt4 .bar{background:var(--pink);}.s-card.alt4 .code{color:#C7278E;background:#FFEBF7;}
+  .s-card.alt5 .bar{background:#000;}.s-card.alt5 .code{color:#000;background:#EEE;}
+
+  /* Session hero slide */
+  .s-session{display:grid;grid-template-columns:1.1fr .9fr;padding:88px 96px 96px;gap:80px;}
+  .s-session .left{display:flex;flex-direction:column;}
+  .s-session .code{
+    font-size:22px;font-weight:800;letter-spacing:.14em;color:var(--red);
+    display:inline-flex;align-items:center;gap:14px;
+  }
+  .s-session .code::before{content:"";width:56px;height:6px;background:var(--red);border-radius:3px;}
+  .s-session h2{font-size:76px;font-weight:900;letter-spacing:-.025em;line-height:1;margin:28px 0 32px;color:#000;text-wrap:balance;}
+  .s-session .meta{display:flex;gap:48px;font-size:20px;color:#444;margin-bottom:32px;}
+  .s-session .meta b{display:block;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#000;margin-bottom:4px;font-weight:800;}
+  .s-session .abstract{font-size:26px;line-height:1.45;color:#222;max-width:820px;text-wrap:pretty;}
+  .s-session .right{
+    background:#F7F7F7;border-radius:24px;padding:40px 44px;display:flex;flex-direction:column;gap:24px;
+    position:relative;overflow:hidden;
+  }
+  .s-session .right::before{
+    content:"";position:absolute;right:-40px;top:-40px;width:180px;height:180px;border-radius:50%;background:var(--rainbow);opacity:.12;
+  }
+  .s-session .right h5{font-size:15px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:#999;margin:0;}
+  .s-session .spk-card{padding-top:16px;border-top:1px solid #E4E4E4;}
+  .s-session .spk-card:first-of-type{border-top:none;padding-top:0;}
+  .s-session .spk-card .name{font-size:28px;font-weight:800;color:#000;letter-spacing:-.01em;}
+  .s-session .spk-card .co{font-size:20px;color:var(--red);font-weight:700;margin-top:4px;}
+  .s-session .spk-card .title{font-size:17px;color:#555;margin-top:2px;}
+  .s-session .takeaways{margin-top:auto;padding-top:24px;border-top:1px solid #E4E4E4;}
+  .s-session .takeaways h5{margin-bottom:12px;}
+  .s-session .takeaways ul{padding-left:20px;margin:0;font-size:19px;line-height:1.55;color:#222;}
+  .s-session .takeaways li{margin-bottom:8px;}
+
+  /* Session detail: big-content slide */
+  .s-detail{padding:88px 96px 96px;display:grid;grid-template-rows:auto 1fr;}
+  .s-detail .eyebrow{font-size:20px;font-weight:800;letter-spacing:.14em;color:var(--red);}
+  .s-detail h2{font-size:64px;font-weight:900;letter-spacing:-.02em;line-height:1;margin:18px 0 48px;text-wrap:balance;max-width:1700px;}
+  .s-detail .body{display:grid;grid-template-columns:1fr 1fr;gap:56px;}
+  .s-detail .block{background:#F7F7F7;border-radius:20px;padding:36px 40px;display:flex;flex-direction:column;gap:16px;position:relative;}
+  .s-detail .block .lbl{font-size:14px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:#000;display:flex;align-items:center;gap:12px;}
+  .s-detail .block .lbl .dot{width:14px;height:14px;border-radius:50%;background:var(--red);}
+  .s-detail .block.b1 .dot{background:var(--red);}
+  .s-detail .block.b2 .dot{background:var(--blue);}
+  .s-detail .block.b3 .dot{background:var(--green);}
+  .s-detail .block.b4 .dot{background:var(--orange);}
+  .s-detail .block h3{font-size:34px;font-weight:800;margin:0;line-height:1.1;text-wrap:balance;letter-spacing:-.01em;}
+  .s-detail .block ul{margin:0;padding:0 0 0 4px;font-size:21px;line-height:1.5;color:#222;list-style:none;}
+  .s-detail .block ul li{position:relative;padding-left:24px;margin-bottom:10px;}
+  .s-detail .block ul li::before{content:"";position:absolute;left:0;top:.6em;width:10px;height:10px;background:#000;border-radius:50%;}
+  .s-detail .block.b1 ul li::before{background:var(--red);}
+  .s-detail .block.b2 ul li::before{background:var(--blue);}
+  .s-detail .block.b3 ul li::before{background:var(--green);}
+  .s-detail .block.b4 ul li::before{background:var(--orange);}
+
+  /* Stat slide */
+  .s-stats{padding:88px 96px 96px;}
+  .s-stats .eyebrow{font-size:20px;font-weight:800;letter-spacing:.14em;color:var(--red);}
+  .s-stats h2{font-size:64px;font-weight:900;letter-spacing:-.02em;line-height:1;margin:18px 0 48px;text-wrap:balance;}
+  .s-stats .row{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;}
+  .s-stats .stat{border:2px solid var(--ink);border-radius:22px;padding:36px 36px 32px;min-height:320px;display:flex;flex-direction:column;}
+  .s-stats .stat .n{font-size:110px;font-weight:900;letter-spacing:-.03em;line-height:1;color:#000;}
+  .s-stats .stat.red .n{color:var(--red);}
+  .s-stats .stat.blue .n{color:var(--blue);}
+  .s-stats .stat.green .n{color:var(--green);}
+  .s-stats .stat.orange .n{color:var(--orange);}
+  .s-stats .stat .u{font-size:30px;font-weight:800;margin-top:-6px;letter-spacing:-.01em;}
+  .s-stats .stat .lbl{font-size:20px;color:#333;margin-top:auto;padding-top:24px;border-top:1px solid var(--line);line-height:1.35;}
+
+  /* Quote slide */
+  .s-quote{padding:120px 120px;background:#000;color:#fff;display:flex;flex-direction:column;justify-content:center;}
+  .s-quote .mark{font-size:200px;line-height:.6;color:var(--red);font-weight:900;margin-bottom:-30px;}
+  .s-quote q{font-size:76px;font-weight:800;letter-spacing:-.02em;line-height:1.1;quotes:none;display:block;max-width:1600px;text-wrap:balance;}
+  .s-quote .by{font-size:28px;margin-top:48px;color:#ccc;letter-spacing:.08em;}
+  .s-quote .by b{color:#fff;font-weight:700;display:block;font-size:32px;letter-spacing:-.01em;margin-bottom:4px;}
+  .s-quote .chrome-footer{background:#000;color:rgba(255,255,255,.6);border-top-color:rgba(255,255,255,.15);}
+  .s-quote .chrome-footer .brand{color:#fff;}
+
+  /* Takeaway final */
+  .s-take{padding:88px 96px 96px;}
+  .s-take .eyebrow{font-size:20px;font-weight:800;letter-spacing:.14em;color:var(--red);}
+  .s-take h2{font-size:96px;font-weight:900;letter-spacing:-.03em;line-height:.98;margin:18px 0 48px;text-wrap:balance;max-width:1500px;}
+  .s-take .list{display:grid;grid-template-columns:1fr 1fr;gap:40px 56px;margin-top:20px;}
+  .s-take .item{display:flex;gap:28px;padding-right:20px;}
+  .s-take .item .num{font-size:76px;font-weight:900;line-height:1;color:var(--red);min-width:90px;}
+  .s-take .item.n2 .num{color:var(--blue);}
+  .s-take .item.n3 .num{color:var(--green);}
+  .s-take .item.n4 .num{color:var(--orange);}
+  .s-take .item.n5 .num{color:var(--pink);}
+  .s-take .item.n6 .num{color:#000;}
+  .s-take .item h4{font-size:32px;font-weight:800;margin:0 0 8px;letter-spacing:-.01em;line-height:1.15;}
+  .s-take .item p{font-size:20px;color:#333;margin:0;line-height:1.5;max-width:640px;}
+
+  /* Final slide */
+  .s-end{background:#000;color:#fff;padding:96px;display:flex;flex-direction:column;justify-content:space-between;}
+  .s-end h1{font-size:200px;font-weight:900;letter-spacing:-.04em;line-height:.92;margin:0;text-wrap:balance;}
+  .s-end h1 .red{color:var(--red);}
+  .s-end .tag{font-size:28px;letter-spacing:.2em;text-transform:uppercase;color:#bbb;}
+  .s-end .rbow{height:10px;background:var(--rainbow);width:480px;margin-top:32px;}
+  .s-end .chrome-footer{background:#000;color:rgba(255,255,255,.6);border-top-color:rgba(255,255,255,.15);}
+  .s-end .chrome-footer .brand{color:#fff;}
+
+  /* Utility */
+  .pill{display:inline-flex;align-items:center;font-size:14px;font-weight:800;padding:4px 10px;border-radius:6px;letter-spacing:.12em;text-transform:uppercase;background:#000;color:#fff;}
+  .pill.red{background:var(--red);} .pill.blue{background:var(--blue);} .pill.green{background:var(--green);}
+  .pill.ghost{background:transparent;color:#000;border:1.5px solid #000;}
+
+</style>
+</head>
+<body>
+
+<deck-stage>
+
+  <!-- ============ 01. Title ============ -->
+  <section class="s-title" data-screen-label="01 Title">
+    <div class="eyebrow"><b>Adobe</b> &nbsp;Summit 2026 &nbsp;·&nbsp; Marketo Engage セッションまとめ</div>
+    <div>
+      <h1>Marketo,<br>at the <span class="red">center</span>.</h1>
+      <div class="sub">Adobe Summit 2026 で発表された Marketo Engage 関連 9 セッションのハイライト。</div>
+    </div>
+    <div class="meta">
+      <div><b>作成</b>Mitsutaka Kato / Adobe</div>
+      <div><b>出典</b>Adobe Summit 2026 — My Schedule（全 26 セッション中 Marketo 関連 9 件）</div>
+      <div><b>最終更新</b>2026年4月23日</div>
+    </div>
+    <div class="pattern">
+      <div class="sq" style="right:260px;top:40px;width:90px;height:90px;"></div>
+      <div class="sq" style="right:100px;top:10px;width:60px;height:60px;background:#000;"></div>
+      <div class="cir" style="right:180px;top:130px;width:120px;height:120px;"></div>
+      <div class="sq" style="right:40px;top:180px;width:140px;height:140px;"></div>
+      <div class="tri" style="right:280px;bottom:100px;border-left:70px solid transparent;border-right:70px solid transparent;border-bottom:120px solid #000;"></div>
+      <div class="rbow"></div>
+    </div>
+    <div class="chrome-footer">
+      <div class="brand"><b>Adobe</b>&nbsp;Summit 2026 · Marketo Engage</div>
+      <div class="rainbow"></div>
+      <div>01 / 18</div>
+    </div>
+  </section>
+
+  <!-- ============ 02. Why Marketo at Summit ============ -->
+  <section class="s-std" data-screen-label="02 Why Marketo">
+    <div class="eyebrow">なぜ Marketo が Summit 2026 の中心なのか</div>
+    <h2>Marketo Engage が<br>B2B AI レベニューエンジンの<span style="color:var(--red);">土台</span>になる。</h2>
+    <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:72px;margin-top:24px;">
+      <div style="font-size:28px;line-height:1.55;color:#222;text-wrap:pretty;">
+        <p style="margin-top:0">Summit 2026 の全 26 セッション中、<b>9 セッション</b>が Marketo Engage を中核テーマに据えています。Adobe 自身の "Adobe on Adobe" 事例、Nasdaq・Workday・CDW・Prudential・Airwallex などの大規模顧客事例、そして新機能（Email Designer、Data Streams）の 3 軸で構成。</p>
+        <p>AJO B2B Edition・Marketo Measure・AEP と連携した <b>統合 B2B スタック</b> の中で、Marketo は「実行エンジン × データハブ × AI オーケストレーター」へと進化しています。</p>
+      </div>
+      <div style="display:grid;grid-template-rows:repeat(3,1fr);gap:20px;">
+        <div style="background:#FFF1EF;border-radius:18px;padding:28px 32px;border-left:10px solid var(--red);">
+          <div style="font-size:52px;font-weight:900;color:var(--red);line-height:1;">9</div>
+          <div style="font-size:22px;font-weight:700;margin-top:6px;">Marketo 関連セッション</div>
+        </div>
+        <div style="background:#EAEFFF;border-radius:18px;padding:28px 32px;border-left:10px solid var(--blue);">
+          <div style="font-size:52px;font-weight:900;color:var(--blue);line-height:1;">5</div>
+          <div style="font-size:22px;font-weight:700;margin-top:6px;">顧客事例（Nasdaq / Workday / CDW / Prudential / Airwallex）</div>
+        </div>
+        <div style="background:#E6F6EE;border-radius:18px;padding:28px 32px;border-left:10px solid var(--green);">
+          <div style="font-size:52px;font-weight:900;color:var(--green);line-height:1;">3</div>
+          <div style="font-size:22px;font-weight:700;margin-top:6px;">主要プロダクト発表（Email Designer / Data Streams / AI Agents）</div>
+        </div>
+      </div>
+    </div>
+    <div class="chrome-footer">
+      <div class="brand"><b>Adobe</b>&nbsp;Summit 2026 · Marketo Engage</div>
+      <div class="rainbow"></div>
+      <div>02 / 18</div>
+    </div>
+  </section>
+
+  <!-- ============ 03. Session Map ============ -->
+  <section class="s-std" data-screen-label="03 Session Map">
+    <div class="eyebrow">Marketo 関連セッション 9 本</div>
+    <h2>3 つのテーマで読み解く。</h2>
+    <div class="grid-9">
+      <div class="s-card">
+        <span class="code">OS219</span>
+        <h4>All-New Email Designer が Marketo Engage を加速</h4>
+        <div class="spk"><b>Joe Stewart</b> / Deepthi Amirthagadeswaran<br>Adobe</div>
+        <div class="tag">Product · New Capability</div>
+        <div class="bar"></div>
+      </div>
+      <div class="s-card">
+        <span class="code">OS220</span>
+        <h4>Batch から Real Time へ: Marketo Engage Data Streams</h4>
+        <div class="spk"><b>Harman Bola</b> · Adobe<br><b>Philippe Cherfils</b> · Workday</div>
+        <div class="tag">Product · New Capability</div>
+        <div class="bar"></div>
+      </div>
+      <div class="s-card alt1">
+        <span class="code">OS222</span>
+        <h4>B2B Customer Journey Management: AI で進化する</h4>
+        <div class="spk"><b>Karishma Phansalkar</b><br>Adobe</div>
+        <div class="tag">Product · AI Vision</div>
+        <div class="bar"></div>
+      </div>
+
+      <div class="s-card alt2">
+        <span class="code">OS223</span>
+        <h4>Designing Marketo Engage for Scale — Adobe 自身の Revenue Engine</h4>
+        <div class="spk"><b>Kayleen Can</b> · <b>Scott Leslie</b><br>Adobe Platform Operations</div>
+        <div class="tag">Adobe on Adobe · Scale</div>
+        <div class="bar"></div>
+      </div>
+      <div class="s-card alt2">
+        <span class="code">OS217</span>
+        <h4>Adobe が B2B Paid Media を再発明した方法 (AJO B2B Edition × Marketo)</h4>
+        <div class="spk"><b>Chen Bian</b> · <b>Beth Campbell</b><br>Adobe</div>
+        <div class="tag">Adobe on Adobe · Paid Media</div>
+        <div class="bar"></div>
+      </div>
+      <div class="s-card alt2">
+        <span class="code">OS216</span>
+        <h4>レポーティング混沌を CEO ダッシュボードで明快に</h4>
+        <div class="spk"><b>Coral Willis</b> · Nasdaq<br><b>Kelsey White</b> · GNW Consulting</div>
+        <div class="tag">Customer · Reporting</div>
+        <div class="bar"></div>
+      </div>
+
+      <div class="s-card alt3">
+        <span class="code">OS215</span>
+        <h4>CDW が Marketo Engage を AI Vision の土台に選んだ理由</h4>
+        <div class="spk"><b>Andy Wang</b> · <b>Alonzo Foreman</b><br>CDW</div>
+        <div class="tag">Customer · Agentic</div>
+        <div class="bar"></div>
+      </div>
+      <div class="s-card alt3">
+        <span class="code">OS218</span>
+        <h4>Real-Time Customer Engagement で営業を加速 (Prudential)</h4>
+        <div class="spk"><b>Corey Bayless</b><br>Prudential Financial</div>
+        <div class="tag">Customer · Real-Time</div>
+        <div class="bar"></div>
+      </div>
+      <div class="s-card alt3">
+        <span class="code">OS956</span>
+        <h4>Skill Exchange: Marketo Engage Data Foundation 構築</h4>
+        <div class="spk"><b>Razvan Paraschiv</b><br>Airwallex</div>
+        <div class="tag">Customer · Skill Exchange</div>
+        <div class="bar"></div>
+      </div>
+    </div>
+    <div class="chrome-footer">
+      <div class="brand"><b>Adobe</b>&nbsp;Summit 2026 · Marketo Engage</div>
+      <div class="rainbow"></div>
+      <div>03 / 18</div>
+    </div>
+  </section>
+
+  <!-- ============ 04. Divider: Theme 1 ============ -->
+  <section class="s-divider" data-screen-label="04 Theme 1 Divider">
+    <div>
+      <div class="tag">Theme 01</div>
+      <div class="num">01</div>
+      <h2>新機能 — Marketo が<br>"リアルタイム & AI-native" に進化する。</h2>
+      <div class="rainbow"></div>
+    </div>
+    <div class="chrome-footer">
+      <div class="brand"><b>Adobe</b>&nbsp;Summit 2026 · Marketo Engage</div>
+      <div class="rainbow"></div>
+      <div>04 / 18</div>
+    </div>
+  </section>
+
+  <!-- ============ 05. OS219 Email Designer ============ -->
+  <section class="s-session" data-screen-label="05 OS219 Email Designer">
+    <div class="left">
+      <div class="code">OS219 · New Capability</div>
+      <h2>All-New Email Designer が Marketo Engage を加速する。</h2>
+      <div class="meta">
+        <div><b>時間 (JST)</b>Mon · 4:30–4:45 AM</div>
+        <div><b>種別</b>Breakout Session</div>
+        <div><b>資料</b>Transcript</div>
+      </div>
+      <div class="abstract">
+        WYSIWYG のドラッグ&ドロップエディタ、Firefly / Express / GenStudio との連携、AI アシスタントによるコピー・件名・画像の自動生成。<br>
+        「開発者や代理店に頼らず、マーケターが直接・高速・ブランド準拠で」Eメールを量産する、次世代の Email Designer。
+      </div>
+    </div>
+    <div class="right">
+      <div>
+        <h5>Speakers</h5>
+        <div class="spk-card" style="margin-top:16px;">
+          <div class="name">Joe Stewart</div>
+          <div class="co">Adobe</div>
+          <div class="title">Senior Product Marketing Manager</div>
+        </div>
+        <div class="spk-card">
+          <div class="name">Deepthi Amirthagadeswaran</div>
+          <div class="co">Adobe</div>
+          <div class="title">Senior Product Manager, Email Designer</div>
+        </div>
+      </div>
+      <div class="takeaways">
+        <h5>Key Takeaways</h5>
+        <ul>
+          <li>2024 年 2 月ローンチ以降、機能を急速拡張</li>
+          <li>AI コンテンツ生成（Firefly / AI Assistant）内蔵</li>
+          <li>コンテンツ再利用・パーソナライズ・ブランドガバナンス強化</li>
+          <li>マルチデバイス・プレビュー / 検証フローが標準化</li>
+        </ul>
+      </div>
+    </div>
+    <div class="chrome-footer">
+      <div class="brand"><b>Adobe</b>&nbsp;Summit 2026 · Marketo Engage</div>
+      <div class="rainbow"></div>
+      <div>05 / 18</div>
+    </div>
+  </section>
+
+  <!-- ============ 06. OS220 Data Streams ============ -->
+  <section class="s-session" data-screen-label="06 OS220 Data Streams">
+    <div class="left">
+      <div class="code">OS220 · New Capability</div>
+      <h2>Batch から Real Time へ: Marketo Engage Data Streams。</h2>
+      <div class="meta">
+        <div><b>時間 (JST)</b>Mon · 4:45–5:00 AM</div>
+        <div><b>種別</b>Breakout Session</div>
+        <div><b>資料</b>PDF + Transcript</div>
+      </div>
+      <div class="abstract">
+        ポーリング・バッチエクスポート・遅延を排し、アクティビティデータを <b>リアルタイムで宛先システムへ直接配信</b>。<br>
+        AI / リアルタイム意思決定 / パーソナライゼーション / 分析を、<b>遅延ゼロの活動データ</b>でドライブする新しい基盤。Workday が本番稼働事例を紹介。
+      </div>
+    </div>
+    <div class="right">
+      <div>
+        <h5>Speakers</h5>
+        <div class="spk-card" style="margin-top:16px;">
+          <div class="name">Harman Bola</div>
+          <div class="co">Adobe</div>
+          <div class="title">Sr. Product Marketing Manager, Marketo Engage</div>
+        </div>
+        <div class="spk-card">
+          <div class="name">Philippe Cherfils</div>
+          <div class="co">Workday</div>
+          <div class="title">Director, Global Marketing Automation & Data Management</div>
+        </div>
+      </div>
+      <div class="takeaways">
+        <h5>Key Takeaways</h5>
+        <ul>
+          <li>Traditional batch / manual export → 限界に</li>
+          <li>Data Streams で <b>ダウンストリームへ即時 Push</b></li>
+          <li>AI・Real-time Decisioning・Warehouse 連携が前提に</li>
+          <li>Workday のデータ複雑性下での運用知見を共有</li>
+        </ul>
+      </div>
+    </div>
+    <div class="chrome-footer">
+      <div class="brand"><b>Adobe</b>&nbsp;Summit 2026 · Marketo Engage</div>
+      <div class="rainbow"></div>
+      <div>06 / 18</div>
+    </div>
+  </section>
+
+  <!-- ============ 07. OS222 AI Journey ============ -->
+  <section class="s-session" data-screen-label="07 OS222 B2B Journey AI">
+    <div class="left">
+      <div class="code">OS222 · AI Vision</div>
+      <h2>B2B Customer Journey Management が AI で生まれ変わる。</h2>
+      <div class="meta">
+        <div><b>時間 (JST)</b>Tue · 8:15–8:30 AM</div>
+        <div><b>種別</b>Breakout Session</div>
+        <div><b>資料</b>Transcript Summary</div>
+      </div>
+      <div class="abstract">
+        Adobe の B2B ポートフォリオ（AJO B2B Edition / Marketo Engage）を横断する AI 戦略。<br>
+        顧客を単一の AI モデルに押し込むのではなく、<b>"progression" — 顧客が自分のペースで AI 成熟度を上げられる設計</b>。生産性・最適化・パイプラインインパクトを同時に追求。
+      </div>
+    </div>
+    <div class="right">
+      <div>
+        <h5>Speaker</h5>
+        <div class="spk-card" style="margin-top:16px;">
+          <div class="name">Karishma Phansalkar</div>
+          <div class="co">Adobe</div>
+          <div class="title">Sr. Product Marketing Manager, B2B Customer Journeys</div>
+        </div>
+      </div>
+      <div class="takeaways">
+        <h5>Key Takeaways</h5>
+        <ul>
+          <li>B2B AI 採用は "one-size-fits-all" ではない</li>
+          <li>Practical → Experimental → Advanced の 3 段階</li>
+          <li>Adobe は <b>置換ではなく段階的進化</b>を設計思想に</li>
+          <li>Marketo Engage は AJO B2B と並ぶ中心プロダクト</li>
+        </ul>
+      </div>
+    </div>
+    <div class="chrome-footer">
+      <div class="brand"><b>Adobe</b>&nbsp;Summit 2026 · Marketo Engage</div>
+      <div class="rainbow"></div>
+      <div>07 / 18</div>
+    </div>
+  </section>
+
+  <!-- ============ 08. Divider Theme 2 ============ -->
+  <section class="s-divider" data-screen-label="08 Theme 2 Divider">
+    <div>
+      <div class="tag">Theme 02</div>
+      <div class="num">02</div>
+      <h2>Adobe on Adobe — 自社で<br>Marketo をどう使いこなしているか。</h2>
+      <div class="rainbow"></div>
+    </div>
+    <div class="chrome-footer">
+      <div class="brand"><b>Adobe</b>&nbsp;Summit 2026 · Marketo Engage</div>
+      <div class="rainbow"></div>
+      <div>08 / 18</div>
+    </div>
+  </section>
+
+  <!-- ============ 09. OS223 Scale Stats ============ -->
+  <section class="s-stats" data-screen-label="09 OS223 Adobe Scale">
+    <div class="eyebrow">OS223 · Adobe on Adobe — Revenue Engine</div>
+    <h2>Adobe 自身の Marketo Engage は<br>この規模で動いている。</h2>
+    <div class="row">
+      <div class="stat red">
+        <div class="n">35M<span class="u">+</span></div>
+        <div class="lbl">Person Records<br>単一インスタンス内の総レコード数</div>
+      </div>
+      <div class="stat blue">
+        <div class="n">10K<span class="u">/日</span></div>
+        <div class="lbl">平均的な日次リードボリューム</div>
+      </div>
+      <div class="stat orange">
+        <div class="n">50K<span class="u">/日</span></div>
+        <div class="lbl">ピーク時の日次リードボリューム</div>
+      </div>
+      <div class="stat green">
+        <div class="n">4<span class="u"> → 1</span></div>
+        <div class="lbl">4 つの Marketo インスタンスを<br>1 つに統合した実績</div>
+      </div>
+    </div>
+    <div style="margin-top:56px;display:grid;grid-template-columns:1fr 1fr;gap:40px;">
+      <div style="background:#F7F7F7;border-radius:18px;padding:32px 40px;">
+        <div style="font-size:16px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:#666;">設計の前提</div>
+        <div style="font-size:30px;font-weight:800;margin-top:10px;line-height:1.2;">複数の BU · 2 つの CRM を、<br>単一の Marketo Engage が支える。</div>
+      </div>
+      <div style="background:#000;color:#fff;border-radius:18px;padding:32px 40px;">
+        <div style="font-size:16px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--red);">Key Lesson</div>
+        <div style="font-size:30px;font-weight:800;margin-top:10px;line-height:1.2;">"Scale exposes weak architecture."<br><span style="font-size:20px;font-weight:500;color:#ccc;">— Kayleen Can · Scott Leslie, Adobe Platform Operations</span></div>
+      </div>
+    </div>
+    <div class="chrome-footer">
+      <div class="brand"><b>Adobe</b>&nbsp;Summit 2026 · Marketo Engage</div>
+      <div class="rainbow"></div>
+      <div>09 / 18</div>
+    </div>
+  </section>
+
+  <!-- ============ 10. OS217 Paid Media ============ -->
+  <section class="s-detail" data-screen-label="10 OS217 Paid Media">
+    <div>
+      <div class="eyebrow">OS217 · Adobe on Adobe — B2B Paid Media</div>
+      <h2>Adobe が自社の B2B Paid Media を<br>"オーケストレーション層" で作り直した。</h2>
+    </div>
+    <div class="body">
+      <div class="block b1">
+        <div class="lbl"><span class="dot"></span>Problem</div>
+        <h3>手作業が支配する Paid Media の実行。</h3>
+        <ul>
+          <li>LinkedIn / ZoomInfo などへの <b>手動リスト更新</b> が 10 回以上のハンドオフを要する</li>
+          <li>サプレッション・除外リスト変更のたびにスプレッドシートを更新</li>
+          <li>アカウント進捗の可視性が低く、パイプラインへの影響が測れない</li>
+          <li>B2B の中でも <b>最も高価で運用が複雑</b>なチャネル</li>
+        </ul>
+      </div>
+      <div class="block b2">
+        <div class="lbl"><span class="dot"></span>Solution</div>
+        <h3>AJO B2B Edition × Marketo Engage を "Orchestration Layer" として統合。</h3>
+        <ul>
+          <li>Marketing + Product + BDR が同じ基盤で協調</li>
+          <li>Adobe Marketing 本番環境に実装し、結果を製品ロードマップへフィードバック</li>
+          <li><b>Chen Bian</b>（Business / Campaign Capabilities）と <b>Beth Campbell</b>（Tech / Deployment）の協働モデル</li>
+          <li>"Adobe on Adobe" パートナーシップの具体例として提示</li>
+        </ul>
+      </div>
+    </div>
+    <div class="chrome-footer">
+      <div class="brand"><b>Adobe</b>&nbsp;Summit 2026 · Marketo Engage</div>
+      <div class="rainbow"></div>
+      <div>10 / 18</div>
+    </div>
+  </section>
+
+  <!-- ============ 11. OS216 CEO Dashboard ============ -->
+  <section class="s-detail" data-screen-label="11 OS216 CEO Dashboard">
+    <div>
+      <div class="eyebrow">OS216 · Nasdaq × GNW Consulting — Reporting</div>
+      <h2>レポーティング混沌を CEO ダッシュボードの<br>"単一の真実" に変える。</h2>
+    </div>
+    <div class="body">
+      <div class="block b1">
+        <div class="lbl"><span class="dot"></span>Challenge</div>
+        <h3>部門別レポートが執行判断を止める。</h3>
+        <ul>
+          <li>Marketing / Sales / Finance のレポートが分断</li>
+          <li>大量データはあるが、<b>経営が信頼できる数字</b>が無い</li>
+          <li>指標定義が部門ごとにバラバラ、データガバナンス不在</li>
+        </ul>
+      </div>
+      <div class="block b2">
+        <div class="lbl"><span class="dot"></span>Stack</div>
+        <h3>Marketo Engage + Marketo Measure + AJO B2B。</h3>
+        <ul>
+          <li>キャンペーン実行とエンゲージメントの把握：<b>Marketo Engage</b></li>
+          <li>アトリビューションとパフォーマンス分析：<b>Marketo Measure</b></li>
+          <li>パーソナライズコンテンツ生成・検証：<b>AJO B2B</b></li>
+        </ul>
+      </div>
+      <div class="block b3">
+        <div class="lbl"><span class="dot"></span>Executive KPI</div>
+        <h3>経営が見たい 3 指標を束ねる。</h3>
+        <ul>
+          <li><b>ROI</b> — 投資に対する収益貢献</li>
+          <li><b>Pipeline Velocity</b> — パイプライン速度</li>
+          <li><b>Customer Lifetime Value</b> — 長期価値</li>
+        </ul>
+      </div>
+      <div class="block b4">
+        <div class="lbl"><span class="dot"></span>AI Acceleration</div>
+        <h3>Gen AI でダッシュボードとインサイトを自動化。</h3>
+        <ul>
+          <li>ダッシュボード生成 / インサイト要約を AI に委譲</li>
+          <li>レポート作成のリードタイムを圧縮</li>
+          <li>チームが分析 → <b>意思決定</b>に時間を使える状態へ</li>
+        </ul>
+      </div>
+    </div>
+    <div class="chrome-footer">
+      <div class="brand"><b>Adobe</b>&nbsp;Summit 2026 · Marketo Engage</div>
+      <div class="rainbow"></div>
+      <div>11 / 18</div>
+    </div>
+  </section>
+
+  <!-- ============ 12. Divider Theme 3 ============ -->
+  <section class="s-divider" data-screen-label="12 Theme 3 Divider">
+    <div>
+      <div class="tag">Theme 03</div>
+      <div class="num">03</div>
+      <h2>顧客事例 — CDW · Prudential ·<br>Airwallex が語る現場のリアル。</h2>
+      <div class="rainbow"></div>
+    </div>
+    <div class="chrome-footer">
+      <div class="brand"><b>Adobe</b>&nbsp;Summit 2026 · Marketo Engage</div>
+      <div class="rainbow"></div>
+      <div>12 / 18</div>
+    </div>
+  </section>
+
+  <!-- ============ 13. OS215 CDW ============ -->
+  <section class="s-session" data-screen-label="13 OS215 CDW">
+    <div class="left">
+      <div class="code">OS215 · CDW</div>
+      <h2>CDW は、Marketo Engage を "AI Vision の土台" に選んだ。</h2>
+      <div class="meta">
+        <div><b>時間 (JST)</b>Tue · 8:30–8:45 AM</div>
+        <div><b>種別</b>Customer Session</div>
+        <div><b>資料</b>PDF + Transcript</div>
+      </div>
+      <div class="abstract">
+        CDW は Agentic Marketing 戦略を <b>実運用レベル</b>で動かし始めている。<br>
+        Marketo Engage を martech スタックのコアに据え、<b>AI エージェントが複数チャネルをまたいでオーディエンスをアクティベート</b>。計測可能なパイプラインインパクトを、チャネル横断で生み出す。
+      </div>
+    </div>
+    <div class="right">
+      <div>
+        <h5>Speakers</h5>
+        <div class="spk-card" style="margin-top:16px;">
+          <div class="name">Andy Wang</div>
+          <div class="co">CDW</div>
+          <div class="title">VP of Demand Generation</div>
+        </div>
+        <div class="spk-card">
+          <div class="name">Alonzo Foreman</div>
+          <div class="co">CDW</div>
+          <div class="title">Director of Marketing Automation</div>
+        </div>
+      </div>
+      <div class="takeaways">
+        <h5>Key Takeaways</h5>
+        <ul>
+          <li>Martech スタックの <b>中央</b>に Marketo Engage</li>
+          <li>AI エージェントがオーディエンスを動的に構成</li>
+          <li>複数チャネルをまたぐ <b>Agentic Orchestration</b></li>
+          <li>成果指標は "計測可能なパイプラインインパクト"</li>
+        </ul>
+      </div>
+    </div>
+    <div class="chrome-footer">
+      <div class="brand"><b>Adobe</b>&nbsp;Summit 2026 · Marketo Engage</div>
+      <div class="rainbow"></div>
+      <div>13 / 18</div>
+    </div>
+  </section>
+
+  <!-- ============ 14. OS218 Prudential ============ -->
+  <section class="s-session" data-screen-label="14 OS218 Prudential">
+    <div class="left">
+      <div class="code">OS218 · Prudential Financial</div>
+      <h2>Real-Time Customer Engagement で、営業プロセスを再発明する。</h2>
+      <div class="meta">
+        <div><b>時間 (JST)</b>Tue · 8:45–9:00 AM</div>
+        <div><b>種別</b>Customer Session</div>
+        <div><b>資料</b>PDF + Transcript</div>
+      </div>
+      <div class="abstract">
+        複数システム・複数プロダクトを統合し、<b>リアルタイム顧客エンゲージメント</b>を実現。<br>
+        Marketo Engage の <b>In-App イベント × 行動トリガー</b>により、"買い手が動く、まさにその瞬間" に営業が正しい一手を打てる。セールスサイクルを縮める設計。
+      </div>
+    </div>
+    <div class="right">
+      <div>
+        <h5>Speaker</h5>
+        <div class="spk-card" style="margin-top:16px;">
+          <div class="name">Corey Bayless</div>
+          <div class="co">Prudential Financial</div>
+          <div class="title">Director</div>
+        </div>
+      </div>
+      <div class="takeaways">
+        <h5>Key Takeaways</h5>
+        <ul>
+          <li>マルチシステム × マルチプロダクトの統合</li>
+          <li>In-App Events + Behavior Triggers</li>
+          <li>リアルタイム Sales Enablement を標準化</li>
+          <li>「適切な瞬間」にバイヤーを掴む設計</li>
+        </ul>
+      </div>
+    </div>
+    <div class="chrome-footer">
+      <div class="brand"><b>Adobe</b>&nbsp;Summit 2026 · Marketo Engage</div>
+      <div class="rainbow"></div>
+      <div>14 / 18</div>
+    </div>
+  </section>
+
+  <!-- ============ 15. OS956 Airwallex ============ -->
+  <section class="s-session" data-screen-label="15 OS956 Airwallex">
+    <div class="left">
+      <div class="code">OS956 · Airwallex — Skill Exchange</div>
+      <h2>Marketo Engage を "マーケティング全タッチポイントのハブ" にする。</h2>
+      <div class="meta">
+        <div><b>時間 (JST)</b>Tue · 8:15–8:30 AM</div>
+        <div><b>種別</b>Skill Exchange</div>
+        <div><b>資料</b>PDF + Transcript</div>
+      </div>
+      <div class="abstract">
+        Paid Media / Event / Product Usage など <b>多様なソースのエンゲージメントデータ</b>を Marketo Engage に集約。<br>
+        統合アクティビティデータを <b>レベニューインサイト</b>に変換する、実践的な Data Foundation 構築ハンズオン。
+      </div>
+    </div>
+    <div class="right">
+      <div>
+        <h5>Speaker</h5>
+        <div class="spk-card" style="margin-top:16px;">
+          <div class="name">Razvan Paraschiv</div>
+          <div class="co">Airwallex</div>
+          <div class="title">Global Marketing Operations</div>
+        </div>
+      </div>
+      <div class="takeaways">
+        <h5>Key Takeaways</h5>
+        <ul>
+          <li>Marketo Engage を <b>エンゲージメントハブ</b>に</li>
+          <li>Paid / Event / Product Usage を一元化</li>
+          <li>統合データ → アクショナブルなレベニュー指標へ</li>
+          <li>Skill Exchange 形式の実装ノウハウ共有</li>
+        </ul>
+      </div>
+    </div>
+    <div class="chrome-footer">
+      <div class="brand"><b>Adobe</b>&nbsp;Summit 2026 · Marketo Engage</div>
+      <div class="rainbow"></div>
+      <div>15 / 18</div>
+    </div>
+  </section>
+
+  <!-- ============ 16. Quote ============ -->
+  <section class="s-quote" data-screen-label="16 Quote">
+    <div class="mark">&ldquo;</div>
+    <q>Scale exposes weak architecture.</q>
+    <div class="by"><b>Kayleen Can · Scott Leslie</b>Adobe Platform Operations — OS223: Designing Marketo Engage for Scale</div>
+    <div class="chrome-footer">
+      <div class="brand"><b>Adobe</b>&nbsp;Summit 2026 · Marketo Engage</div>
+      <div class="rainbow"></div>
+      <div>16 / 18</div>
+    </div>
+  </section>
+
+  <!-- ============ 17. Takeaways ============ -->
+  <section class="s-take" data-screen-label="17 Takeaways">
+    <div class="eyebrow">Marketo Engage @ Summit 2026 — 6 つの持ち帰り</div>
+    <h2>Marketo は<br><span style="color:var(--red);">実行ツール</span>から<br>レベニュー OS へ。</h2>
+    <div class="list">
+      <div class="item">
+        <div class="num">01</div>
+        <div><h4>リアルタイム化</h4><p>Data Streams により、バッチ/ポーリングから「ダウンストリームへの即時 Push」へ。AI と Decisioning の前提条件が整う。</p></div>
+      </div>
+      <div class="item n2">
+        <div class="num">02</div>
+        <div><h4>AI-native オーサリング</h4><p>New Email Designer は Firefly / Express / GenStudio と統合。マーケター主導で高速＋ブランド準拠のコンテンツ生産。</p></div>
+      </div>
+      <div class="item n3">
+        <div class="num">03</div>
+        <div><h4>スケール設計の標準化</h4><p>Adobe 自身が 35M レコード × 複数 BU × 2 CRM を単一インスタンスで運用。Scale 設計のベストプラクティスが共有される。</p></div>
+      </div>
+      <div class="item n4">
+        <div class="num">04</div>
+        <div><h4>オーケストレーション層</h4><p>Paid Media の手作業・部門分断を AJO B2B × Marketo で解消。Marketo は実行エンジンとデータハブを兼ねる。</p></div>
+      </div>
+      <div class="item n5">
+        <div class="num">05</div>
+        <div><h4>単一の CEO ダッシュボード</h4><p>Engage + Measure + AJO B2B で ROI / Velocity / LTV を束ね、経営が信頼できる "単一の真実" を作る。</p></div>
+      </div>
+      <div class="item n6">
+        <div class="num">06</div>
+        <div><h4>Agentic Marketing の本格稼働</h4><p>CDW が示すように、AI エージェントがチャネルを横断してオーディエンスをアクティベートする時代が始まっている。</p></div>
+      </div>
+    </div>
+    <div class="chrome-footer">
+      <div class="brand"><b>Adobe</b>&nbsp;Summit 2026 · Marketo Engage</div>
+      <div class="rainbow"></div>
+      <div>17 / 18</div>
+    </div>
+  </section>
+
+  <!-- ============ 18. End ============ -->
+  <section class="s-end" data-screen-label="18 End">
+    <div>
+      <div class="tag">Thank you</div>
+      <h1>Marketo,<br>at the <span class="red">center</span>.</h1>
+      <div class="rbow"></div>
+    </div>
+    <div style="display:flex;gap:64px;font-size:22px;color:#bbb;">
+      <div><b style="color:#fff;display:block;font-size:14px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:6px;">Compiled by</b>Mitsutaka Kato · Adobe</div>
+      <div><b style="color:#fff;display:block;font-size:14px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:6px;">Source</b>Adobe Summit 2026 — My Schedule (26 sessions, 9 Marketo-related)</div>
+      <div><b style="color:#fff;display:block;font-size:14px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:6px;">Updated</b>Apr 23, 2026</div>
+    </div>
+    <div class="chrome-footer">
+      <div class="brand"><b>Adobe</b>&nbsp;Summit 2026 · Marketo Engage</div>
+      <div class="rainbow"></div>
+      <div>18 / 18</div>
+    </div>
+  </section>
+
+</deck-stage>
+
+</body>
+</html>
